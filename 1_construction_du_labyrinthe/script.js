@@ -6,19 +6,26 @@ console.log(jsonDatas[3]["ex-0"]);
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let size = 30;
+let size = 0;
 
 let mazeSize = document.getElementById("mazeSize").value;
 let mazeEx = document.getElementById("mazeExemple").value;
 
 
+// événement qui génére la création du labyrinthe
 document.querySelector("#mazeGenerate").addEventListener('click', function () {
     mazeSize = document.getElementById("mazeSize").value;
     mazeEx = document.getElementById("mazeExemple").value;
+    size = configCellSize(mazeSize);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze(jsonDatas[mazeSize][mazeEx]);
 
 })
+
+// je crée une fonction qui détermine la taille de mes cases en fonctions de la taille du labyrinthe
+function configCellSize(mazeSize) {
+    return canvas.width / mazeSize;
+}
 
 // je crée une fonction pour dessiner une ligne dans le canvas
 function drawLine(startX, startY, endX, endY) {
@@ -58,7 +65,7 @@ function drawStart() {
 function drawExit() {
     ctx.beginPath();
     ctx.fillStyle = '#008000';
-    ctx.fillRect((mazeSize * size) - size/2, (mazeSize * size) - size/2, size/2, size/2);
+    ctx.fillRect((mazeSize * size) - size / 2, (mazeSize * size) - size / 2, size / 2, size / 2);
 }
 
 function drawMaze(maze) {
