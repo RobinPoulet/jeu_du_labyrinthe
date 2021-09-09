@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <link href="style.css" rel="stylesheet">
+    <script
+            type="text/javascript"
+            src='js/lib/jquery-3.3.1.min.js'
+    ></script>
+    <script
+            type="text/javascript"
+            src='js/lib/bootstrap.min.js'
+    ></script>
+    <link href='css/lib/bootstrap.min.css' rel='stylesheet'>
     <title>labyrinthe</title>
     <style>
         * { padding: 0; margin: 0; }
@@ -12,16 +21,21 @@
 <body>
 <h1>Bienvenue dans mon super labyrinthe</h1>
 
-<div class="grid">
-<div id="case0-0" class="cell"></div>
-<div id="case0-1" class="cell"></div>
-<div id="case0-2" class="cell"></div>
-<div id="case1-0" class="cell"></div>
-<div id="case1-1" class="cell"></div>
-<div id="case1-2" class="cell"></div>
-<div id="case2-0" class="cell"></div>
-<div id="case2-1" class="cell"></div>
-<div id="case2-2" class="cell"></div>
+<div class="form-group">
+    <label for="mazeSize">Choisir la taille du labyrinthe (entre 3 et 25)</label>
+    <input type="number" id="mazeSize" value="3" size="2">
+    <br>
+    <label for="mazeExemple">Choisir un exemple de labyrinthe</label>
+    <select
+        class="form-control"
+        id="mazeExemple"
+    >
+        <option value="ex-0">Exemple 0</option>
+        <option value="ex-1">Exemple 1</option>
+        <option value="ex-2">Exemple 2</option>
+    </select>
+    <br>
+    <button type="submit" id="mazeGenerate">Générer le labyrinthe</button>
 </div>
 
 <canvas id="myCanvas" width="900" height="900"></canvas>
