@@ -20,6 +20,8 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze(jsonDatasBis[mazeSize][mazeEx]);
     dfs(jsonDatasBis[mazeSize][mazeEx], 0);
+    drawStart();
+    drawExit();
 
 })
 
@@ -69,14 +71,18 @@ function drawExit() {
     ctx.fillRect((mazeSize * size) - size / 2, (mazeSize * size) - size / 2, size / 2, size / 2);
 }
 
+function drawPos(maze, pos) {
+   ctx.beginPath();
+    ctx.fillStyle = '#FFF0F5';
+    ctx.fillRect(maze[pos].posX * size, maze[pos].posY * size, 0.99 * size ,  0.99 * size );
+}
+
 function drawMaze(maze) {
     maze.forEach(function (cell) {
         cell.visited = false;
         drawCell(cell.posX * size, cell.posY * size, cell.walls);
         // console.log(cell);
     });
-    drawStart();
-    drawExit();
 }
 
 class Stack {
@@ -126,11 +132,13 @@ function dfs(maze, start) {
        let curPos = stack.pop();
        console.log(curPos);
        maze[curPos].visited = true;
+      drawPos(maze, curPos);
        console.log('je suis passé case : ' + curPos);
 
        // C'est gagné si je suis arrivé à la fin
        if (curPos === mazeSize * mazeSize - 1) {
            console.log("Gagné bravo !!!");
+           return true;
        }
        // Je regarde les voision non visités dans l'ordre (Haut, Droite, Bas, Gauche),
        // je marque le parent, comme visité et je l'ajoute au stack
