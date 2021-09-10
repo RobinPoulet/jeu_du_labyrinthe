@@ -257,4 +257,22 @@ function recursive_DFS(start, maze) {
     return false;
 }
 
+ function toArrIterativeDFS(start) {
+    const stack = [];
+    const visited = new Set();
+    const startNode = this.nodes.get(start);
+    if (startNode) {
+        stack.push(startNode);
+    }
+
+    while (stack.length) {
+        const currNode = stack.pop();
+        if (!visited.has(currNode.data)) {
+            visited.add(currNode.data);
+
+            stack.push(...Array.from(currNode.getEdges().values()).reverse());
+        }
+    }
+    return Array.from(visited);
+}
 
