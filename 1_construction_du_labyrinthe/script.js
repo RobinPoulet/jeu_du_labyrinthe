@@ -32,9 +32,9 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     size = configCellSize(mazeSize);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze(jsonDatasBis[mazeSize][mazeEx]);
-    recursive_DFS(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
-
-
+    // recursive_DFS(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
+    // toArrIterativeDFS(0);
+    console.log(findpath(jsonDatasBis[mazeSize][mazeEx], 0));
     // let interval = setInterval(draw, 50);
 
 
@@ -257,22 +257,52 @@ function recursive_DFS(start, maze) {
     return false;
 }
 
- function toArrIterativeDFS(start) {
-    const stack = [];
-    const visited = new Set();
-    const startNode = this.nodes.get(start);
-    if (startNode) {
-        stack.push(startNode);
-    }
+function findpath(maze, start) {
+    let seenPath = new Set();
 
-    while (stack.length) {
-        const currNode = stack.pop();
-        if (!visited.has(currNode.data)) {
-            visited.add(currNode.data);
+    findPathRecur(maze, start, seenPath);
 
-            stack.push(...Array.from(currNode.getEdges().values()).reverse());
-        }
-    }
-    return Array.from(visited);
+    return Array.from(seenPath);
 }
 
+function findPathRecur(maze, point, seenPath) {
+
+
+    if (!isValidPathPoint(maze, point, seenPath)) {
+        return false;
+    }
+
+    if (point === mazeSize * mazeSize - 1) {
+        seenPath.add(point);
+        return true;
+    }
+
+    seenPath.add(point);
+
+    if (findPathRecur(maze, point - mazeSize, seenPath)) {
+        return true;
+    }
+    if (findpath(maze, point + 1, seenPath)) {
+        return true;
+    }
+    if (findpath(maze, point + mazeSize, seenPath)) {
+        return true;
+    }
+    if (findpath(maze, point - 1, seenPath)) {
+        return true;
+    }
+
+    seenPath.delete(point);
+
+    return false;
+}
+
+function isValidPathPoint(maze, point, seenPath) {
+    if (maze[point] !== null) {
+
+        if (!seenPath.has(point)) {
+            return true;
+        }
+    }
+    return false;
+}
