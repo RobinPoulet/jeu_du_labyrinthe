@@ -19,7 +19,7 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     size = configCellSize(mazeSize);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawMaze(jsonDatasBis[mazeSize][mazeEx]);
-    dfs(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1, mazeSize);
+    dfs(jsonDatasBis[mazeSize][mazeEx], 0);
 
 })
 
@@ -97,50 +97,52 @@ class Stack {
     }
 }
 
-function unvisitedneighbors(maze, pos, size) {
-    console.log(maze[0].walls);
-    console.log(pos);
-    console.log(size);
-    let unvisitneighboors = [];
-    let sizeInt = parseInt(size);
-    if (!maze[pos].walls[0] && !maze[pos - sizeInt].visited) {
-        unvisitneighboors.push(maze[pos - sizeInt]);
+function whoIsNeighbours(pos, maze) {
+    let allNeighboursPos = [];
+
+    if (!maze[pos].walls[0]) {
+        allNeighboursPos.push(pos -  parseInt(mazeSize));
     }
-    if (!maze[pos].walls[1] && !maze[pos + 1].visited) {
-        unvisitneighboors.push(maze[pos + 1]);
+    if (!maze[pos].walls[1]) {
+        allNeighboursPos.push(pos + 1);
     }
-    if (!maze[pos].walls[2] && !maze[pos + sizeInt].visited) {
-        unvisitneighboors.push(maze[pos + sizeInt]);
+    if (!maze[pos].walls[2]) {
+        allNeighboursPos.push(pos + parseInt(mazeSize));
     }
-    if (!maze[pos].walls[3] && !maze[pos - 1].visited) {
-        unvisitneighboors.push(maze[pos - 1]);
+    if (!maze[pos].walls[3]) {
+        allNeighboursPos.push(pos - 1);
     }
-    return unvisitneighboors;
+    return allNeighboursPos;
 }
 
 
-function dfs(maze, start, end, size) {
+function dfs(maze, start) {
     // je crée le stack et met le noeud de départ dedans
     let stack = new Stack();
-   maze[start].visited = true;
-   stack.push(maze[start]);
+   stack.push(start);
    // tant qu'il reste un noeud dans le stack je continue
    while (!stack.empty()) {
-       let curCell = stack.pop();
+
+       let curPos = stack.pop();
+       console.log(curPos);
+       maze[curPos].visited = true;
+       console.log('je suis passé case : ' + curPos);
 
        // C'est gagné si je suis arrivé à la fin
-       if (curCell === maze[end]) {
+       if (curPos === mazeSize * mazeSize - 1) {
            console.log("Gagné bravo !!!");
        }
-
        // Je regarde les voision non visités dans l'ordre (Haut, Droite, Bas, Gauche),
        // je marque le parent, comme visité et je l'ajoute au stack
-       let unvisiteNeighbors = unvisitedneighbors(maze, curCell, size);
-       for (let i = 0; i < unvisiteNeighbors.length; i++) {
-           unvisiteNeighbors[i].visited = true;
-           unvisiteNeighbors[i].parents = maze[curCell];
-           stack.push(unvisiteNeighbors[i]);
-           console.log("j'ai visité la case : " + maze[curCell]);
+       let neighboors = whoIsNeighbours(curPos, maze);
+       for (let i = 0; i < neighboors.length; i++) {
+           if (!maze[neighboors[i]].visited) {
+                // console.log(neighboors);
+               maze[neighboors[i]].parents = maze[curPos];
+               stack.push(neighboors[i]);
+               // console.log(maze);
+           }
+
        }
    }
 
