@@ -34,9 +34,9 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
     // j'applique l'algorithme DFS pour récupérer le path de sortie
     // dfs(jsonDatasBis[mazeSize][mazeEx], 0);
-     dfsRecursive(0, jsonDatasBis[mazeSize][mazeEx]);
+     dfsRecursiveBis(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
     // j'affiche le path de sortie avec ma fonction draw
-    interval = setInterval(draw, 50);
+    // interval = setInterval(draw, 50);
 })
 
 // événement qui reset le canvas
@@ -117,8 +117,8 @@ function drawPos(maze, pos) {
     //     ctx.fillStyle = '#2F4F4F';
     // }
 
-    let x = (maze[pos].posX * size) + 2;
-    let y = (maze[pos].posY * size) + 2;
+    let x = (maze[pos].posX * size) + 3;
+    let y = (maze[pos].posY * size) + 3;
     let w = size - 4;
     let h = size - 4;
 
@@ -277,5 +277,33 @@ function dfsRecursive(start, maze, path = new Set()) {
             dfsRecursive(neighboor, maze, path);
         }
     }
+}
+
+function dfsRecursiveBis(maze, start, end) {
+     // Terminé si le but est atteinds
+    if (start === end) {
+        console.log('c est gagné');
+        return true;
+    }
+
+    // Visite du noeud courant
+    maze[start].visite = true;
+    maze.path.push(start);
+    console.log(start);
+    // On cherche les voisins non visités
+    let neighboors = whoIsNeighbours(start, maze);
+
+    for (let i = 0; i < neighboors.length; i++) {
+        if (!maze[neighboors[i]].visite) {
+            maze[neighboors[i]].parent = start;
+
+            // Appel récursif et fin si le but est atteind
+            if (dfsRecursiveBis(maze, neighboors[i], end)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
