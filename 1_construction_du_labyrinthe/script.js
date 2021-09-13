@@ -15,6 +15,7 @@ let x = 0;
 
 
 
+
 // événement qui génére la création du labyrinthe et sa résolution
 document.querySelector("#mazeGenerate").addEventListener('click', function () {
     // je récupère la valeur de mes inputs avant affichage
@@ -32,7 +33,8 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
 // événement qui affiche la résolution du labyrinthe acec l'algorithme DFS itératif
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
     // j'applique l'algorithme DFS pour récupérer le path de sortie
-    dfs(jsonDatasBis[mazeSize][mazeEx], 0);
+    // dfs(jsonDatasBis[mazeSize][mazeEx], 0);
+     dfsRecursive(0, jsonDatasBis[mazeSize][mazeEx]);
     // j'affiche le path de sortie avec ma fonction draw
     interval = setInterval(draw, 50);
 })
@@ -43,14 +45,12 @@ document.querySelector('#buttonRAS').addEventListener('click', function () {
 })
 
 
-
 // fonction d'affichage
 
 // fonction qui sert à afficher la résolution du labyrinthe
 function draw() {
     drawStart();
     drawExit();
-
     if (x < jsonDatasBis[mazeSize][mazeEx].path.length) {
         drawPos(jsonDatasBis[mazeSize][mazeEx], jsonDatasBis[mazeSize][mazeEx].path[x]);
         x++;
@@ -60,6 +60,7 @@ function draw() {
     }
 }
 
+
 // je crée une fonction qui détermine la taille de mes cases en fonctions de la taille du labyrinthe
 function configCellSize(mazeSize) {
     return canvas.width / mazeSize;
@@ -67,7 +68,7 @@ function configCellSize(mazeSize) {
 
 // je crée une fonction pour dessiner une ligne dans le canvas
 function drawLine(startX, startY, endX, endY) {
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 7;
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, endY);
 }
@@ -110,7 +111,11 @@ function drawExit() {
 
 function drawPos(maze, pos) {
     ctx.beginPath();
-    ctx.fillStyle = '#2F4F4F';
+    // if (maze.bestPath.includes(pos)) {
+        ctx.fillStyle = '#7f00ff';
+    // } else {
+    //     ctx.fillStyle = '#2F4F4F';
+    // }
 
     let x = (maze[pos].posX * size) + 2;
     let y = (maze[pos].posY * size) + 2;
@@ -193,6 +198,7 @@ function whoIsNeighbours(pos, maze) {
 
 function dfs(maze, start) {
     maze.path = [];
+    maze.bestPath = [];
     // je crée le stack et met le noeud de départ dedans
     let stack = new Stack();
     stack.push(start);
@@ -201,34 +207,28 @@ function dfs(maze, start) {
 
         let curPos = stack.pop();
         console.log(curPos);
-        // drawPos(maze, curPos);
-
         maze.path.push(curPos);
-        // maze.path.forEach(function (pos) {
-        //     if (pos === curPos) {
-        //         maze.path.pop();
-        //     }
-        // });
+        // maze.bestPath.push(curPos);
         maze[curPos].visited = true;
+
         console.log('je suis passé case : ' + curPos);
 
         // C'est gagné si je suis arrivé à la fin
         if (curPos === mazeSize * mazeSize - 1) {
-            maze.path = Array.from(createSet(maze.path));
-
             console.log(maze.path);
             console.log("Gagné bravo !!!");
-
-            return true;
+            solutionPathRecursive(mazeSize * mazeSize - 1, jsonDatasBis[mazeSize][mazeEx]);
+            return maze.path;
         }
+
         // Je regarde les voisins non visités dans l'ordre (Haut, Droite, Bas, Gauche),
         // je marque le parent, comme visité et je l'ajoute au stack
-        let neighboors = whoIsNeighbours(curPos, maze);
+        neighboors = whoIsNeighbours(curPos, maze);
 
         for (let i = 0; i < neighboors.length; i++) {
             if (!maze[neighboors[i]].visited) {
                 // console.log(neighboors);
-                maze[neighboors[i]].parents = maze[curPos];
+                maze[neighboors[i]].parents = curPos;
                 stack.push(neighboors[i]);
                 // console.log(maze);
             }
@@ -238,80 +238,44 @@ function dfs(maze, start) {
 
 }
 
-function createSet(arr) {
-    return new Set(arr);
+function solutionPath(pos, maze) {
+    maze.bestPath.push(pos);
+  while (maze[pos].parents !== 0) {
+      pos = maze[pos].parents;
+      maze.bestPath.push(pos);
+  }
+    maze.bestPath.push(0);
 }
 
-
-function recursive_DFS(start, maze) {
-    // fini si on est arrivé
-    if (start) {
-        console.log("Gagné bravo !!!");
-        return true;
+function solutionPathRecursive(pos, maze) {
+    maze.bestPath.push(pos);
+    if (pos === 0) {
+        maze.bestPath.push(0);
+        return maze.bestPath;
+    } else {
+        solutionPathRecursive(maze[pos].parents, maze);
     }
-
-    // visit la position courante
-    start.visited = true;
-    console.log('je suis case n° : ' + start);
-
-    // prendre les case voisines dans l'ordre
-    let neighboors = whoIsNeighbours(start, maze);
-    for (let i = 0; i < neighboors.length; i++) {
-        neighboors[i].parent = start;
-
-        // appel recursif and fin si le but est atteind
-        if (recursive_DFS(maze, neighboors[i], end)) return true;
-    }
-
-    return false;
 }
 
-function findpath(maze, start) {
-    let seenPath = new Set();
+function dfsRecursive(start, maze, path = new Set()) {
+    console.log(start);
 
-    findPathRecur(maze, start, seenPath);
-
-    return Array.from(seenPath);
-}
-
-function findPathRecur(maze, point, seenPath) {
+    path.add(start);
 
 
-    if (!isValidPathPoint(maze, point, seenPath)) {
-        return false;
-    }
+    const neighboors = whoIsNeighbours(start, maze);
 
-    if (point === mazeSize * mazeSize - 1) {
-        seenPath.add(point);
-        return true;
-    }
+    for (const neighboor of neighboors) {
+        if (neighboor === mazeSize * mazeSize -1) {
+            path.add(neighboor);
+            console.log('you found the exit');
+            maze.path = Array.from(path);
+            return maze.path;
+        }
 
-    seenPath.add(point);
-
-    if (findPathRecur(maze, point - mazeSize, seenPath)) {
-        return true;
-    }
-    if (findpath(maze, point + 1, seenPath)) {
-        return true;
-    }
-    if (findpath(maze, point + mazeSize, seenPath)) {
-        return true;
-    }
-    if (findpath(maze, point - 1, seenPath)) {
-        return true;
-    }
-
-    seenPath.delete(point);
-
-    return false;
-}
-
-function isValidPathPoint(maze, point, seenPath) {
-    if (maze[point] !== null) {
-
-        if (!seenPath.has(point)) {
-            return true;
+        if (!path.has(neighboor)) {
+            dfsRecursive(neighboor, maze, path);
         }
     }
-    return false;
 }
+
