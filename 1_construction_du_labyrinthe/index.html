@@ -7,7 +7,7 @@
     <title>labyrinthe</title>
     <style>
         * { padding: 0; margin: 0; }
-        canvas { background: #eee; display: block; margin: 0 auto; }
+        canvas { background: black; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -28,13 +28,15 @@
     </select>
     <br>
     <button type="submit" id="mazeGenerate">Générer le labyrinthe</button>
+    <br>
+    <button id="buttonRAS">Effacer le Canvas</button>
 </div>
 
 <canvas id="myCanvas" width="900" height="900"></canvas>
 
 <br>
 
-<button style="align-content: center">Résolution avec DFS iteratif</button>
+<button id="resolutionDFS">Résolution avec DFS iteratif</button>
 
 </body>
 <script src="labyrinthesbis.js"></script>

@@ -4,49 +4,66 @@
 // Labyrinthe de taille 3x3 : ex-0
 // console.log(jsonDatasBis[3]["ex-0"]);
 
-let canvas = document.getElementById("myCanvas");
-let ctx = canvas.getContext("2d");
+// je déclare mes variables blobales
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+let mazeSize = document.getElementById("mazeSize").value;
+let mazeEx = document.getElementById("mazeExemple").value;
+let interval = null;
 let size = 0;
 let x = 0;
 
-let mazeSize = document.getElementById("mazeSize").value;
-let mazeEx = document.getElementById("mazeExemple").value;
-let drawShortPath = false;
 
 
-
-// événement qui génére la création du labyrinthe
+// événement qui génére la création du labyrinthe et sa résolution
 document.querySelector("#mazeGenerate").addEventListener('click', function () {
+    // je récupère la valeur de mes inputs avant affichage
     mazeSize = document.getElementById("mazeSize").value;
     mazeEx = document.getElementById("mazeExemple").value;
-
-    function draw() {
-        drawPos(jsonDatasBis[mazeSize][mazeEx],  jsonDatasBis[mazeSize][mazeEx].path[x]);
-        if (x < jsonDatasBis[mazeSize][mazeEx].path.length) {
-            x++;
-        } else {
-            x = 0;
-        }
-    }
-
+    // je définis la taille de mes cases en fonction de la taille du labyrinthe
     size = configCellSize(mazeSize);
+    // j'initialise mon canvas avant affichage du labyrinthe
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // j'affiche le labyrinthe
     drawMaze(jsonDatasBis[mazeSize][mazeEx]);
-    // recursive_DFS(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
-    // toArrIterativeDFS(0);
-    console.log(findpath(jsonDatasBis[mazeSize][mazeEx], 0));
-    // let interval = setInterval(draw, 50);
-
 
 })
+
+// événement qui affiche la résolution du labyrinthe acec l'algorithme DFS itératif
+document.querySelector('#resolutionDFS').addEventListener('click', function () {
+    // j'applique l'algorithme DFS pour récupérer le path de sortie
+    dfs(jsonDatasBis[mazeSize][mazeEx], 0);
+    // j'affiche le path de sortie avec ma fonction draw
+    interval = setInterval(draw, 50);
+})
+
+// événement qui reset le canvas
+document.querySelector('#buttonRAS').addEventListener('click', function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
+
+
+
+// fonction d'affichage
+
+// fonction qui sert à afficher la résolution du labyrinthe
+function draw() {
+    drawStart();
+    drawExit();
+
+    if (x < jsonDatasBis[mazeSize][mazeEx].path.length) {
+        drawPos(jsonDatasBis[mazeSize][mazeEx], jsonDatasBis[mazeSize][mazeEx].path[x]);
+        x++;
+    } else {
+        x = 0;
+        clearInterval(interval);
+    }
+}
 
 // je crée une fonction qui détermine la taille de mes cases en fonctions de la taille du labyrinthe
 function configCellSize(mazeSize) {
     return canvas.width / mazeSize;
 }
-
-
-// fonction d'affichage
 
 // je crée une fonction pour dessiner une ligne dans le canvas
 function drawLine(startX, startY, endX, endY) {
@@ -75,6 +92,7 @@ function drawCell(x, y, walls) {
     if (left) {
         drawLine(x, y + size, x, y);
     }
+    ctx.strokeStyle = "#F00020";
     ctx.stroke();
 }
 
@@ -92,11 +110,8 @@ function drawExit() {
 
 function drawPos(maze, pos) {
     ctx.beginPath();
-    if (drawShortPath) {
-        ctx.fillStyle = '#E7A854';
-    } else {
-        ctx.fillStyle = '#AFEEEE';
-    }
+    ctx.fillStyle = '#2F4F4F';
+
     let x = (maze[pos].posX * size) + 2;
     let y = (maze[pos].posY * size) + 2;
     let w = size - 4;
@@ -156,20 +171,20 @@ class Stack {
 function whoIsNeighbours(pos, maze) {
     let allNeighboursPos = [];
 
-    if (!maze[pos].walls[0] && !maze[pos - parseInt(mazeSize)].visited) {
+    if (!maze[pos].walls[0]) {
 
         allNeighboursPos.push(pos - parseInt(mazeSize));
 
     }
-    if (!maze[pos].walls[1] && !maze[pos + 1].visited) {
+    if (!maze[pos].walls[1]) {
 
         allNeighboursPos.push(pos + 1);
 
     }
-    if (!maze[pos].walls[2] && !maze[pos + parseInt(mazeSize)]) {
+    if (!maze[pos].walls[2]) {
         allNeighboursPos.push(pos + parseInt(mazeSize));
     }
-    if (!maze[pos].walls[3] && !maze[pos - 1]) {
+    if (!maze[pos].walls[3]) {
         allNeighboursPos.push(pos - 1);
     }
     return allNeighboursPos;
@@ -199,22 +214,16 @@ function dfs(maze, start) {
 
         // C'est gagné si je suis arrivé à la fin
         if (curPos === mazeSize * mazeSize - 1) {
-           maze.path = Array.from(createSet(maze.path));
+            maze.path = Array.from(createSet(maze.path));
 
-           console.log(maze.path);
+            console.log(maze.path);
             console.log("Gagné bravo !!!");
 
             return true;
         }
-        // Je regarde les voision non visités dans l'ordre (Haut, Droite, Bas, Gauche),
+        // Je regarde les voisins non visités dans l'ordre (Haut, Droite, Bas, Gauche),
         // je marque le parent, comme visité et je l'ajoute au stack
         let neighboors = whoIsNeighbours(curPos, maze);
-
-        if (neighboors.length < 2 && curPos !==0) {
-            maze.goBack = true;
-            maze.path.pop();
-            console.log("je pop");
-        }
 
         for (let i = 0; i < neighboors.length; i++) {
             if (!maze[neighboors[i]].visited) {
@@ -251,7 +260,7 @@ function recursive_DFS(start, maze) {
         neighboors[i].parent = start;
 
         // appel recursif and fin si le but est atteind
-        if(recursive_DFS(maze, neighboors[i], end)) return true;
+        if (recursive_DFS(maze, neighboors[i], end)) return true;
     }
 
     return false;
