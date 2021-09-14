@@ -23,7 +23,11 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     size = configCellSize(mazeSize);
     // j'initialise mon canvas avant affichage du labyrinthe
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // j'affiche le labyrinthe
+    // let maze = ;
+    //je casse quelques murs sur le labyrinthe
+    // destroyRandomWall(maze, 3);
+    //
+    // console.log(maze);
     drawMaze(jsonDatasBis[mazeSize][mazeEx]);
 
 })
@@ -152,6 +156,7 @@ function drawPos(maze, pos) {
 }
 
 function drawMaze(maze) {
+
     maze.forEach(function (cell) {
         cell.visited = false;
         drawCell(cell.posX * size, cell.posY * size, cell.walls);
@@ -319,54 +324,30 @@ function dfsRecursive(maze, start, end) {
     return false;
 }
 
-// Création d'une classe Queue
-class Queue {
-
+// je crée mon objet queue
+class BGQ {
     constructor() {
-        this.s1 = [];
-        this.s2 = [];
-    }
-
-    enQueue(x) {
-        // déplacer tous les éléments de s1 à s2
-        while (this.s1.length !== 0) {
-            this.s2.push(this.s1.pop());
-            //s1.pop();
-        }
-
-        // Push l'item dans s1
-        this.s1.push(x);
-
-        // Push tout ce qu'il reste dans s1
-        while (this.s2.length !== 0) {
-            this.s1.push(this.s2.pop());
-            //s2.pop();
-        }
-    }
-
-    // Dequeue un élément de la queue
-    deQueue() {
-
-        // Si s1 est vide
-        if (this.s1.length === 0) {
-            console.log("Q is empty");
-        }
-
-        // Return le premier élément de s1
-        let x = this.s1[this.s1.length - 1];
-        this.s1.pop();
-        return x;
+        this.queue = [];
     }
 
     empty() {
-        return this.s1.length === 0;
+        return this.queue.length === 0;
+    }
+
+    enQueue(item) {
+        this.queue.push(item);
+    }
+
+    deQueue() {
+        return this.queue.shift()
     }
 }
+
 
 function bfs(maze, start, end) {
     maze.path = [];
     maze.bestPath = [];
-    let Q = new Queue();
+    let Q = new BGQ();
     Q.enQueue(start);
 
     while (!Q.empty()) {
@@ -389,6 +370,42 @@ function bfs(maze, start, end) {
             }
         }
     }
+}
+
+// fonction qui detruit aléatoirement certains murs
+function destroyRandomWall(maze, numberofWallToDestroy) {
+    for (let i = 0; i < numberofWallToDestroy; i++) {
+        let randomPosition = Math.floor(Math.random() * (maze.length - 1));
+        if (maze[randomPosition].posX !==0 && maze[randomPosition].posY !==0
+            && maze[randomPosition].posX !== mazeSize - 1 && maze[randomPosition].posY !== mazeSize - 1) {
+            for (let i = 0; i < maze[randomPosition].walls.length; i++) {
+                if (maze[randomPosition].walls[0]) {
+                    maze[randomPosition].walls[0] = false;
+                    maze[randomPosition + mazeSize].walls[0] = false;
+                    break;
+                }
+                if (maze[randomPosition].walls[1]) {
+                    maze[randomPosition].walls[1] = false;
+                    maze[randomPosition + 1].walls[3] = false;
+                    break;
+                }
+                if (maze[randomPosition].walls[2]) {
+                    maze[randomPosition].walls[2] = false;
+                    maze[randomPosition - mazeSize].walls[0] = false;
+                    break;
+                }
+                if (maze[randomPosition].walls[3]) {
+                    maze[randomPosition].walls[3] = false;
+                    maze[randomPosition - 1].walls[1] = false;
+                    break;
+                }
+
+                i--;
+
+            }
+        }
+    }
+    return maze;
 }
 
 
