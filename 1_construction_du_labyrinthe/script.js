@@ -34,9 +34,13 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
     // j'applique l'algorithme DFS pour récupérer le path de sortie
     // dfs(jsonDatasBis[mazeSize][mazeEx], 0);
-     dfsRecursiveBis(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
+    let maze = jsonDatasBis[mazeSize][mazeEx];
+    maze.path = [];
+    maze.bestPath = [];
+     dfsRecursive(maze, 0, mazeSize * mazeSize - 1);
+
     // j'affiche le path de sortie avec ma fonction draw
-    // interval = setInterval(draw, 50);
+    interval = setInterval(draw, 50);
 })
 
 // événement qui reset le canvas
@@ -111,11 +115,11 @@ function drawExit() {
 
 function drawPos(maze, pos) {
     ctx.beginPath();
-    // if (maze.bestPath.includes(pos)) {
+    if (maze.bestPath.includes(pos)) {
         ctx.fillStyle = '#7f00ff';
-    // } else {
-    //     ctx.fillStyle = '#2F4F4F';
-    // }
+    } else {
+        ctx.fillStyle = '#2F4F4F';
+    }
 
     let x = (maze[pos].posX * size) + 3;
     let y = (maze[pos].posY * size) + 3;
@@ -208,7 +212,7 @@ function dfs(maze, start) {
         let curPos = stack.pop();
         console.log(curPos);
         maze.path.push(curPos);
-        // maze.bestPath.push(curPos);
+
         maze[curPos].visited = true;
 
         console.log('je suis passé case : ' + curPos);
@@ -229,6 +233,7 @@ function dfs(maze, start) {
             if (!maze[neighboors[i]].visited) {
                 // console.log(neighboors);
                 maze[neighboors[i]].parents = curPos;
+
                 stack.push(neighboors[i]);
                 // console.log(maze);
             }
@@ -257,29 +262,29 @@ function solutionPathRecursive(pos, maze) {
     }
 }
 
-function dfsRecursive(start, maze, path = new Set()) {
-    console.log(start);
+// function dfsRecursive(start, maze, path = new Set()) {
+//     console.log(start);
+//
+//     path.add(start);
+//
+//
+//     const neighboors = whoIsNeighbours(start, maze);
+//
+//     for (const neighboor of neighboors) {
+//         if (neighboor === mazeSize * mazeSize -1) {
+//             path.add(neighboor);
+//             console.log('you found the exit');
+//             maze.path = Array.from(path);
+//             return maze.path;
+//         }
+//
+//         if (!path.has(neighboor)) {
+//             dfsRecursive(neighboor, maze, path);
+//         }
+//     }
+// }
 
-    path.add(start);
-
-
-    const neighboors = whoIsNeighbours(start, maze);
-
-    for (const neighboor of neighboors) {
-        if (neighboor === mazeSize * mazeSize -1) {
-            path.add(neighboor);
-            console.log('you found the exit');
-            maze.path = Array.from(path);
-            return maze.path;
-        }
-
-        if (!path.has(neighboor)) {
-            dfsRecursive(neighboor, maze, path);
-        }
-    }
-}
-
-function dfsRecursiveBis(maze, start, end) {
+function dfsRecursive(maze, start, end) {
      // Terminé si le but est atteinds
     if (start === end) {
         console.log('c est gagné');
@@ -295,10 +300,12 @@ function dfsRecursiveBis(maze, start, end) {
 
     for (let i = 0; i < neighboors.length; i++) {
         if (!maze[neighboors[i]].visite) {
-            maze[neighboors[i]].parent = start;
+            maze[neighboors[i]].parents = start;
 
             // Appel récursif et fin si le but est atteind
-            if (dfsRecursiveBis(maze, neighboors[i], end)) {
+            if (dfsRecursive(maze, neighboors[i], end)) {
+                maze.path.push(end);
+                solutionPathRecursive(end, maze);
                 return true;
             }
         }
