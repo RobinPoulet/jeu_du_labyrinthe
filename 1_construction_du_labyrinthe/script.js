@@ -14,8 +14,6 @@ let size = 0;
 let x = 0;
 
 
-
-
 // événement qui génére la création du labyrinthe et sa résolution
 document.querySelector("#mazeGenerate").addEventListener('click', function () {
     // je récupère la valeur de mes inputs avant affichage
@@ -30,16 +28,23 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
 
 })
 
-// événement qui affiche la résolution du labyrinthe acec l'algorithme DFS itératif
+// événement qui affiche la résolution du labyrinthe avec l'algorithme DFS itératif
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
     // j'applique l'algorithme DFS pour récupérer le path de sortie
     // dfs(jsonDatasBis[mazeSize][mazeEx], 0);
+
     let maze = jsonDatasBis[mazeSize][mazeEx];
     maze.path = [];
     maze.bestPath = [];
-     dfsRecursive(maze, 0, mazeSize * mazeSize - 1);
+    dfsRecursive(maze, 0, mazeSize * mazeSize - 1);
 
     // j'affiche le path de sortie avec ma fonction draw
+    interval = setInterval(draw, 50);
+})
+
+// événement qui affiche la résolution du labyrinthe avec l'algorithme BFS
+document.querySelector('#resolutionBFS').addEventListener('click', function () {
+    bfs(jsonDatasBis[mazeSize][mazeEx], 0, mazeSize * mazeSize - 1);
     interval = setInterval(draw, 50);
 })
 
@@ -116,7 +121,7 @@ function drawExit() {
 function drawPos(maze, pos) {
     ctx.beginPath();
     if (maze.bestPath.includes(pos)) {
-        ctx.fillStyle = '#7f00ff';
+        ctx.fillStyle = '#6600cc';
     } else {
         ctx.fillStyle = '#2F4F4F';
     }
@@ -245,10 +250,10 @@ function dfs(maze, start) {
 
 function solutionPath(pos, maze) {
     maze.bestPath.push(pos);
-  while (maze[pos].parents !== 0) {
-      pos = maze[pos].parents;
-      maze.bestPath.push(pos);
-  }
+    while (maze[pos].parents !== 0) {
+        pos = maze[pos].parents;
+        maze.bestPath.push(pos);
+    }
     maze.bestPath.push(0);
 }
 
@@ -285,7 +290,7 @@ function solutionPathRecursive(pos, maze) {
 // }
 
 function dfsRecursive(maze, start, end) {
-     // Terminé si le but est atteinds
+    // Terminé si le but est atteinds
     if (start === end) {
         console.log('c est gagné');
         return true;
@@ -313,4 +318,77 @@ function dfsRecursive(maze, start, end) {
 
     return false;
 }
+
+// Création d'une classe Queue
+class Queue {
+
+    constructor() {
+        this.s1 = [];
+        this.s2 = [];
+    }
+
+    enQueue(x) {
+        // déplacer tous les éléments de s1 à s2
+        while (this.s1.length !== 0) {
+            this.s2.push(this.s1.pop());
+            //s1.pop();
+        }
+
+        // Push l'item dans s1
+        this.s1.push(x);
+
+        // Push tout ce qu'il reste dans s1
+        while (this.s2.length !== 0) {
+            this.s1.push(this.s2.pop());
+            //s2.pop();
+        }
+    }
+
+    // Dequeue un élément de la queue
+    deQueue() {
+
+        // Si s1 est vide
+        if (this.s1.length === 0) {
+            console.log("Q is empty");
+        }
+
+        // Return le premier élément de s1
+        let x = this.s1[this.s1.length - 1];
+        this.s1.pop();
+        return x;
+    }
+
+    empty() {
+        return this.s1.length === 0;
+    }
+}
+
+function bfs(maze, start, end) {
+    maze.path = [];
+    maze.bestPath = [];
+    let Q = new Queue();
+    Q.enQueue(start);
+
+    while (!Q.empty()) {
+        let curPos = Q.deQueue();
+        maze.path.push(curPos);
+        console.log(curPos);
+        maze[curPos].visited = true;
+        if (curPos === end) {
+            console.log("gagné!!!");
+            solutionPathRecursive(end, maze);
+            return maze.path;
+        }
+
+        let neighboors = whoIsNeighbours(curPos, maze);
+
+        for (let i = 0; i < neighboors.length; i++) {
+            if (!maze[neighboors[i]].visited) {
+                maze[neighboors[i]].parents = curPos;
+                Q.enQueue(neighboors[i]);
+            }
+        }
+    }
+}
+
 
