@@ -121,7 +121,7 @@ function drawExit() {
 function drawPos(maze, pos) {
     ctx.beginPath();
     if (maze.bestPath.includes(pos)) {
-        ctx.fillStyle = '#6600cc';
+        ctx.fillStyle = '#8a2be2';
     } else {
         ctx.fillStyle = '#2F4F4F';
     }

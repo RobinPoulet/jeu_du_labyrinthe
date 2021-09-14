@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link href="style.css" rel="stylesheet">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
     <title>labyrinthe</title>
     <style>
@@ -17,28 +19,32 @@
     <label for="mazeSize">Choisir la taille du labyrinthe (entre 3 et 25)</label>
     <input type="number" id="mazeSize" value="3" size="2">
     <br>
-    <label for="mazeExemple">Choisir un exemple de labyrinthe</label>
+    <br>
     <select
-        class="form-control"
+        class="form-select form-select-lsm"
         id="mazeExemple"
+        aria-label=".form-select-sm example"
+
     >
+        <option selected>Choisir un exemple de labyrinthe</option>
         <option value="ex-0">Exemple 0</option>
         <option value="ex-1">Exemple 1</option>
         <option value="ex-2">Exemple 2</option>
     </select>
     <br>
-    <button type="submit" id="mazeGenerate">Générer le labyrinthe</button>
+    <button type="submit" id="mazeGenerate" class="btn btn-primary">Générer le labyrinthe</button>
     <br>
-    <button id="buttonRAS">Effacer le Canvas</button>
+    <br>
+    <button id="buttonRAS" class="btn btn-danger">Effacer le Canvas</button>
 </div>
 
-<canvas id="myCanvas" width="900" height="900"></canvas>
+<canvas id="myCanvas" width="600" height="600"></canvas>
 
 <br>
 
-<button id="resolutionDFS">Résolution avec DFS récursif</button>
+<button id="resolutionDFS" class="btn btn-success">Résolution avec DFS récursif</button>
 
-<button id="resolutionBFS">Résolution avec BFS</button>
+<button id="resolutionBFS" class="btn btn-success">Résolution avec BFS</button>
 
 </body>
 <script src="labyrinthesbis.js"></script>
