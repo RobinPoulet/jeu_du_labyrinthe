@@ -253,14 +253,14 @@ function dfs(maze, start) {
 
 }
 
-function solutionPath(pos, maze) {
-    maze.bestPath.push(pos);
-    while (maze[pos].parents !== 0) {
-        pos = maze[pos].parents;
-        maze.bestPath.push(pos);
-    }
-    maze.bestPath.push(0);
-}
+// function solutionPath(pos, maze) {
+//     maze.bestPath.push(pos);
+//     while (maze[pos].parents !== 0) {
+//         pos = maze[pos].parents;
+//         maze.bestPath.push(pos);
+//     }
+//     maze.bestPath.push(0);
+// }
 
 function solutionPathRecursive(pos, maze) {
     maze.bestPath.push(pos);

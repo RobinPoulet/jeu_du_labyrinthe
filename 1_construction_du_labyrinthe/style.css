@@ -10,7 +10,7 @@ select {
     border-right: 20px;
 }
 
-button {
+.mybuttons {
     border-left: 100px;
     border-right: 20px;
 }
