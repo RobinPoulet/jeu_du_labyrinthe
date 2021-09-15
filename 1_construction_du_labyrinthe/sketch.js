@@ -1,5 +1,5 @@
 let cols, rows;
-let w = 10;
+let w = 40;
 let grid = [];
 
 let current;
@@ -7,7 +7,7 @@ let current;
 let stack = [];
 
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(800, 800);
     cols = Math.floor(width / w);
     rows = Math.floor(width / w);
     // frameRate(5);
@@ -59,8 +59,8 @@ function index(i, j) {
 }
 
 function Cell(i, j) {
-    this.i = i;
-    this.j = j;
+    this.posX = i;
+    this.posY = j;
     this.walls = [true, true, true, true];
     this.visited = false;
 
@@ -95,16 +95,16 @@ function Cell(i, j) {
     }
 
     this.highlight = function () {
-        let x = this.i * w;
-        let y = this.j * w;
+        let x = this.posX * w;
+        let y = this.posY * w;
         noStroke();
         fill(0, 0, 255, 100);
         rect(x, y, w, w);
     }
 
     this.show = function () {
-        let x = this.i * w;
-        let y = this.j * w;
+        let x = this.posX * w;
+        let y = this.posY * w;
         stroke(255);
         if (this.walls[0]) {
             line(x, y, x + w, y);
@@ -136,7 +136,7 @@ function Cell(i, j) {
 
 function removeWalls(cellA, cellB) {
 
-    let x = cellA.i - cellB.i;
+    let x = cellA.posX - cellB.posX;
     if (x === 1) {
         cellA.walls[3] = false;
         cellB.walls[1] = false;
@@ -144,7 +144,7 @@ function removeWalls(cellA, cellB) {
         cellA.walls[1] = false;
         cellB.walls[3] = false;
     }
-    let y = cellA.j - cellB.j;
+    let y = cellA.posY - cellB.posY;
     if (y === 1) {
         cellA.walls[0] = false;
         cellB.walls[2] = false;
