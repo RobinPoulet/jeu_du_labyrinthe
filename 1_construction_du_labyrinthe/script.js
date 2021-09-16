@@ -170,24 +170,7 @@ function drawMaze(maze) {
 // fonction pour utiliser l'algorithme DFS itératif
 
 
-// je crée mon objet stack
-class Stack {
-    constructor() {
-        this.stack = [];
-    }
 
-    empty() {
-        return this.stack.length === 0;
-    }
-
-    push(item) {
-        this.stack.push(item);
-    }
-
-    pop() {
-        return this.stack.pop()
-    }
-}
 
 // fonction qui détermine les voisins d'une case
 function whoIsNeighbours(pos, maze) {
@@ -330,24 +313,24 @@ function dfsRecursive(maze, start, end) {
     return false;
 }
 
-// je crée mon objet queue
-class BGQ {
-    constructor() {
-        this.queue = [];
-    }
-
-    empty() {
-        return this.queue.length === 0;
-    }
-
-    enQueue(item) {
-        this.queue.push(item);
-    }
-
-    deQueue() {
-        return this.queue.shift()
-    }
-}
+// // je crée mon objet queue
+// class BGQ {
+//     constructor() {
+//         this.queue = [];
+//     }
+//
+//     empty() {
+//         return this.queue.length === 0;
+//     }
+//
+//     enQueue(item) {
+//         this.queue.push(item);
+//     }
+//
+//     deQueue() {
+//         return this.queue.shift()
+//     }
+// }
 
 
 function bfs(maze, start, end) {
@@ -418,3 +401,4 @@ function destroyRandomWall(maze, numberofWallToDestroy) {
     }
     return maze;
 }
+
