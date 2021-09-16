@@ -95,16 +95,16 @@ function drawCell(x, y, walls) {
 
     ctx.beginPath();
     if (top) {
-        drawLine(x, y, x + size, y);
+        drawLine(x             ,              y, x + size,              y);
     }
     if (right) {
-        drawLine(x + size, y, x + size, y + size);
+        drawLine(x + size,              y, x + size, y + size);
     }
     if (bottom) {
-        drawLine(x + size, y + size, x, y + size);
+        drawLine(x + size, y + size,             x, y + size);
     }
     if (left) {
-        drawLine(x, y + size, x, y);
+        drawLine(             x, y + size,             x,              y);
     }
     ctx.strokeStyle = "#F00020";
     ctx.stroke();
@@ -119,7 +119,10 @@ function drawStart() {
 function drawExit() {
     ctx.beginPath();
     ctx.fillStyle = '#008000';
-    ctx.fillRect(((mazeSize * size) - size / 2) - 2, ((mazeSize * size) - size / 2) - 2, size / 2, size / 2);
+    ctx.fillRect(((mazeSize * size) - size / 2) - 2,
+                 ((mazeSize * size) - size / 2) - 2,
+                  size / 2,
+                  size / 2);
 }
 
 function drawPos(maze, pos) {
@@ -210,41 +213,41 @@ function whoIsNeighbours(pos, maze) {
 }
 
 
-function dfs(maze, start) {
+function dfs(maze, start, end) {
     maze.path = [];
     maze.bestPath = [];
     // je crée le stack et met le noeud de départ dedans
-    let stack = new Stack();
+    let stack = [];
     stack.push(start);
     // tant qu'il reste un noeud dans le stack je continue
-    while (!stack.empty()) {
+    while (stack.length > 0) {
 
         let curPos = stack.pop();
-        console.log(curPos);
+        // console.log(curPos);
+        // je stock dans un tableau toutes les cases ou je suis passé
         maze.path.push(curPos);
 
         maze[curPos].visited = true;
 
-        console.log('je suis passé case : ' + curPos);
-
         // C'est gagné si je suis arrivé à la fin
-        if (curPos === mazeSize * mazeSize - 1) {
-            console.log(maze.path);
-            console.log("Gagné bravo !!!");
-            solutionPathRecursive(mazeSize * mazeSize - 1, jsonDatasBis[mazeSize][mazeEx]);
-            return maze.path;
+        if (curPos === end) {
+            // console.log(maze.path);
+            // console.log("Gagné bravo !!!");
+            // Je suis arrivé je retourne le chemin le plus court
+
+            return solutionPathRecursive(mazeSize * mazeSize - 1, jsonDatasBis[mazeSize][mazeEx]);;
         }
 
         // Je regarde les voisins non visités dans l'ordre (Haut, Droite, Bas, Gauche),
         // je marque le parent, comme visité et je l'ajoute au stack
-        neighboors = whoIsNeighbours(curPos, maze);
+       let neighbors = whoIsNeighbours(curPos, maze);
 
-        for (let i = 0; i < neighboors.length; i++) {
-            if (!maze[neighboors[i]].visited) {
-                // console.log(neighboors);
-                maze[neighboors[i]].parents = curPos;
+        for (let i = 0; i < neighbors.length; i++) {
+            if (!maze[neighbors[i]].visited) {
+                // console.log(neighbors);
+                maze[neighbors[i]].parents = curPos;
 
-                stack.push(neighboors[i]);
+                stack.push(neighbors[i]);
                 // console.log(maze);
             }
 
@@ -297,26 +300,29 @@ function solutionPathRecursive(pos, maze) {
 function dfsRecursive(maze, start, end) {
     // Terminé si le but est atteinds
     if (start === end) {
-        console.log('c est gagné');
+        // console.log('c est gagné');
         return true;
     }
 
     // Visite du noeud courant
     maze[start].visite = true;
     maze.path.push(start);
-    console.log(start);
+    // console.log(start);
     // On cherche les voisins non visités
-    let neighboors = whoIsNeighbours(start, maze);
+    let neighbors = whoIsNeighbours(start, maze);
 
-    for (let i = 0; i < neighboors.length; i++) {
-        if (!maze[neighboors[i]].visite) {
-            maze[neighboors[i]].parents = start;
+    for (let i = 0; i < neighbors.length; i++) {
+
+        if (!maze[neighbors[i]].visite) {
+
+            maze[neighbors[i]].parents = start;
 
             // Appel récursif et fin si le but est atteind
-            if (dfsRecursive(maze, neighboors[i], end)) {
+            if (dfsRecursive(maze, neighbors[i], end)) {
+
                 maze.path.push(end);
-                solutionPathRecursive(end, maze);
-                return true;
+
+                return solutionPathRecursive(end, maze);
             }
         }
     }
@@ -347,26 +353,31 @@ class BGQ {
 function bfs(maze, start, end) {
     maze.path = [];
     maze.bestPath = [];
-    let Q = new BGQ();
-    Q.enQueue(start);
+    let queue = [];
+    queue.push(start);
 
-    while (!Q.empty()) {
-        let curPos = Q.deQueue();
+    while (queue.length > 0) {
+
+        let curPos = queue.shift();
+
         maze.path.push(curPos);
-        console.log(curPos);
+        // console.log(curPos);
         maze[curPos].visited = true;
+
         if (curPos === end) {
             console.log("gagné!!!");
-            solutionPathRecursive(end, maze);
-            return maze.path;
+
+            return  solutionPathRecursive(end, maze);
         }
 
-        let neighboors = whoIsNeighbours(curPos, maze);
+        let neighbors = whoIsNeighbours(curPos, maze);
 
-        for (let i = 0; i < neighboors.length; i++) {
-            if (!maze[neighboors[i]].visited) {
-                maze[neighboors[i]].parents = curPos;
-                Q.enQueue(neighboors[i]);
+        for (let i = 0; i < neighbors.length; i++) {
+
+            if (!maze[neighbors[i]].visited) {
+
+                maze[neighbors[i]].parents = curPos;
+                queue.push(neighbors[i]);
             }
         }
     }
@@ -407,5 +418,3 @@ function destroyRandomWall(maze, numberofWallToDestroy) {
     }
     return maze;
 }
-
-
