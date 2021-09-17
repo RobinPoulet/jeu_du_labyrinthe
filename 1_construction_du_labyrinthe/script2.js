@@ -28,6 +28,7 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     maze = new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
    // j'affiche mon labyrinthe
     maze.display();
+    maze.solveAstar();
 });
 
 // je crée un événement qui résoud et affiche le parcours avec l'algorithme DFS

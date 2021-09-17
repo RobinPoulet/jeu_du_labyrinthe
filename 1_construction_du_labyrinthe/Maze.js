@@ -109,6 +109,45 @@ class Maze {
 
     }
 
+    heuristicCost(cell) {
+        return (this.mazeCells[this.lastCell].posX - cell.posX) + (this.mazeCells[this.lastCell].posY - cell.posY)
+    }
+
+    solveAstar() {
+
+        let currentCell = this.mazeCells[0]
+        this.queue.push(currentCell);
+
+        while (this.queue.length > 0) {
+
+            currentCell = this.queue.shift()
+            currentCell.visited = true;
+            currentCell.cost = this.heuristicCost(currentCell);
+            console.log(currentCell.position);
+
+            if (currentCell.position === this.lastCell) {
+
+                console.log("c'est gagné");
+                return this.solutionPathRecursive(currentCell.position);
+
+            }
+
+            let voisins = this.get_neighbors(currentCell);
+            for (let voisin of voisins) {
+                if (!this.mazeCells[voisin].visited) {
+                    this.mazeCells[voisin].cost = this.heuristicCost(this.mazeCells[voisin]);
+                    this.mazeCells[voisin].parents = currentCell;
+                    this.queue.push(this.mazeCells[voisin]);
+                    this.queue.sort(function (a, b) {
+                        return a.cost - b.cost;
+                    })
+                }
+            }
+
+        }
+
+    }
+
 }
 
 
