@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="../style.css" rel="stylesheet">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Test classe Maze</title>
     <style>
@@ -11,11 +14,12 @@
 <body>
 <h1>Bienvenue dans mon super labyrinthe</h1>
 
-<div class="form-group">
+<div class="form-group-row">
     <label for="mazeSize">Choisir la taille du labyrinthe (entre 3 et 25)</label>
     <input type="number" id="mazeSize" value="3" size="2">
     <br>
     <br>
+    <div class="col-xs-4">
     <select
             class="form-select form-select-lsm"
             id="mazeExemple"
@@ -27,6 +31,7 @@
         <option value="ex-1">Exemple 1</option>
         <option value="ex-2">Exemple 2</option>
     </select>
+    </div>
     <br>
     <button type="submit" id="mazeGenerate" class="btn btn-primary">Générer le labyrinthe</button>
     <br>

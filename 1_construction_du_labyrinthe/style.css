@@ -15,3 +15,8 @@ select {
     border-right: 20px;
 }
 
+.col-xs-4 {
+    min-width: 0;
+    width: auto;
+    display: inline;
+}
