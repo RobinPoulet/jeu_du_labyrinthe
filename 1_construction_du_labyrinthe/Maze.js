@@ -95,6 +95,16 @@ class Maze {
 
            let neighbors = this.get_neighbors(this.mazeCells[curPos]);
 
+           for (let i = 0; i < neighbors.length; i++) {
+
+               if (!this.mazeCells[neighbors[i]].visited) {
+
+                   this.mazeCells[neighbors[i]].parents = this.mazeCells[curPos];
+                   this.queue.push(neighbors[i]);
+               }
+
+           }
+
        }
 
     }

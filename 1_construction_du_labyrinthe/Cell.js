@@ -35,7 +35,7 @@ class Cell {
 
     drawLine(startX, startY, endX, endY) {
 
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 3;
 
         ctx.moveTo(startX, startY);
         ctx.lineTo(endX, endY);

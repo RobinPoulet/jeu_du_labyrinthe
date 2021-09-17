@@ -37,6 +37,18 @@ document.querySelector('#resolutionDFS').addEventListener('click', function () {
 
 });
 
+// événement qui affiche la résolution du labyrinthe avec l'algorithme BFS
+document.querySelector('#resolutionBFS').addEventListener('click', function () {
+    maze.solveBFS(0);
+    interval = setInterval(draw, 50);
+})
+
+// événement qui reset le canvas
+document.querySelector('#buttonRAS').addEventListener('click', function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
+
+
 
 
 // fonction pour afficher la solution
