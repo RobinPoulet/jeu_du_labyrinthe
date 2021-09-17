@@ -12,7 +12,7 @@ let mazeEx = document.getElementById("mazeExemple").value;
 
 // je crée une fonction qui détermine la taille de mes cases en fonctions de la taille du labyrinthe
 function configCellSize(mazeSize) {
-    return canvas.width / mazeSize;
+    return Math.floor(canvas.width / mazeSize);
 }
 
 // je crée un événement qui affiche un labyrinthe quand je clique sur le bouton "générer labyrinthe"
@@ -28,7 +28,9 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     maze = new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
    // j'affiche mon labyrinthe
     maze.display();
-    maze.solveAstar();
+
+    interval = setInterval(draw, 50);
+
 });
 
 // je crée un événement qui résoud et affiche le parcours avec l'algorithme DFS
@@ -40,7 +42,8 @@ document.querySelector('#resolutionDFS').addEventListener('click', function () {
 
 // événement qui affiche la résolution du labyrinthe avec l'algorithme BFS
 document.querySelector('#resolutionBFS').addEventListener('click', function () {
-    maze.solveBFS(0);
+    // maze.solveBFS(0);
+    maze.solveAstar();
     interval = setInterval(draw, 50);
 })
 
@@ -56,8 +59,6 @@ document.querySelector('#buttonRAS').addEventListener('click', function () {
 function colorCell(cell, maze) {
     let x = cell.posX * caseSize;
     let y = cell.posY * caseSize;
-    let w = caseSize;
-    let h = caseSize;
 
     ctx.beginPath();
 
@@ -66,7 +67,7 @@ function colorCell(cell, maze) {
     } else {
         ctx.fillStyle = '#2F4F4F';
     }
-   ctx.fillRect(x + 1, y + 1, w + 1, h + 1);
+   ctx.fillRect(x , y , caseSize , caseSize);
     drawStart();
     drawExit();
 }

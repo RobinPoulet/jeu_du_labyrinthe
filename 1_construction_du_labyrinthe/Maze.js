@@ -116,13 +116,14 @@ class Maze {
     solveAstar() {
 
         let currentCell = this.mazeCells[0]
+
         this.queue.push(currentCell);
 
         while (this.queue.length > 0) {
 
             currentCell = this.queue.shift()
+            this.path.push(currentCell.position);
             currentCell.visited = true;
-            currentCell.cost = this.heuristicCost(currentCell);
             console.log(currentCell.position);
 
             if (currentCell.position === this.lastCell) {
