@@ -9,9 +9,46 @@
     </style>
 </head>
 <body>
-<h1>Test de la classe Maze</h1>
-<canvas id="myCanvas" width="400" height="400"></canvas>
+<h1>Bienvenue dans mon super labyrinthe</h1>
+
+<div class="form-group">
+    <label for="mazeSize">Choisir la taille du labyrinthe (entre 3 et 25)</label>
+    <input type="number" id="mazeSize" value="3" size="2">
+    <br>
+    <br>
+    <select
+            class="form-select form-select-lsm"
+            id="mazeExemple"
+            aria-label=".form-select-sm example"
+
+    >
+        <option selected>Choisir un exemple de labyrinthe</option>
+        <option value="ex-0">Exemple 0</option>
+        <option value="ex-1">Exemple 1</option>
+        <option value="ex-2">Exemple 2</option>
+    </select>
+    <br>
+    <button type="submit" id="mazeGenerate" class="btn btn-primary">Générer le labyrinthe</button>
+    <br>
+    <br>
+    <button id="buttonRAS" class="btn btn-danger">Effacer le Canvas</button>
+</div>
+<canvas id="myCanvas" width="600" height="600"></canvas>
+<div>
+    <br>
+
+    <div class="mybuttons">
+
+        <button id="resolutionDFS" class="btn btn-success">Résolution avec DFS récursif</button>
+
+        <button id="resolutionBFS" class="btn btn-success">Résolution avec BFS</button>
+
+    </div>
+
+</div>
 </body>
 <script src="labyrinthesbis.js"></script>
-<script src="maze.js"></script>
+<script src="Maze.js"></script>
+<script src="Cell.js"></script>
+<script src="script2.js"></script>
 </html>
