@@ -40,6 +40,12 @@ h3 {
 }
 
 body {
-    background-image: url("img/dot-grid.png");
+    background-image: url("img/circles-dark.png");
     background-repeat: repeat;
 }
+
+.p5Canvas {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+

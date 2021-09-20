@@ -7,7 +7,8 @@ let current;
 let stack = [];
 
 function setup() {
-    createCanvas(800, 800);
+    let ctx = createCanvas(800, 800);
+    ctx.style.margin = "50px";
     cols = Math.floor(width / w);
     rows = Math.floor(width / w);
     // frameRate(5);
@@ -65,25 +66,21 @@ function Cell(i, j) {
     this.visited = false;
 
     this.checkNeighbors = function () {
-        let neighbors = [];
+        const OFFSETS = [
+            index(i, j -1),
+            index(i +1, j),
+            index(i, j +1),
+            index(i -1, j)
+        ]
 
-        let top    = grid[index(i, j -1)];
-        let right  = grid[index(i +1, j)];
-        let bottom = grid[index(i, j +1)];
-        let left   = grid[index(i -1, j)];
+        const neighbors = [];
 
-        if (top && !top.visited) {
-            neighbors.push(top);
-        }
-        if (right && !right.visited) {
-            neighbors.push(right);
-        }
-        if (bottom && !bottom.visited) {
-            neighbors.push(bottom);
-        }
-        if (left && !left.visited) {
-            neighbors.push(left);
-        }
+        OFFSETS.forEach((dir) => {
+            let neighbor = grid[dir];
+            if (neighbor && !neighbor.visited) {
+                neighbors.push(neighbor);
+            }
+        })
 
         if (neighbors.length > 0) {
             let r = Math.floor(random(0, neighbors.length));
@@ -105,19 +102,18 @@ function Cell(i, j) {
     this.show = function () {
         let x = this.posX * w;
         let y = this.posY * w;
+        const OFFSETS = [
+            {x: x,y: y,wi: x + w,h: y},
+            {x: x + w, y: y, wi: x + w, h: y + w},
+            {x : x + w, y: y + w, wi: x, h: y + w},
+            {x : x, y : y + w, wi: x, h: y}
+        ];
         stroke(255);
-        if (this.walls[0]) {
-            line(x, y, x + w, y);
-        }
-        if (this.walls[1]) {
-            line(x + w, y, x + w, y + w);
-        }
-        if (this.walls[2]) {
-            line(x + w, y + w, x, y + w);
-        }
-        if (this.walls[3]) {
-            line(x, y + w, x, y);
-        }
+        OFFSETS.forEach((dir, index) => {
+            if (this.walls[index]) {
+                line(dir.x, dir.y, dir.wi, dir.h);
+            }
+        });
 
         if (this.visited) {
             noStroke();
@@ -136,20 +132,41 @@ function Cell(i, j) {
 
 function removeWalls(cellA, cellB) {
 
-    let x = cellA.posX - cellB.posX;
-    if (x === 1) {
-        cellA.walls[3] = false;
-        cellB.walls[1] = false;
-    } else if (x === -1) {
-        cellA.walls[1] = false;
-        cellB.walls[3] = false;
-    }
-    let y = cellA.posY - cellB.posY;
-    if (y === 1) {
-        cellA.walls[0] = false;
-        cellB.walls[2] = false;
-    } else if (y === -1) {
-        cellA.walls[2] = false;
-        cellB.walls[0] = false;
-    }
+    // let x = cellA.posX - cellB.posX;
+    // if (x === 1) {
+    //     cellA.walls[3] = false;
+    //     cellB.walls[1] = false;
+    // } else if (x === -1) {
+    //     cellA.walls[1] = false;
+    //     cellB.walls[3] = false;
+    // }
+    // let y = cellA.posY - cellB.posY;
+    // if (y === 1) {
+    //     cellA.walls[0] = false;
+    //     cellB.walls[2] = false;
+    // } else if (y === -1) {
+    //     cellA.walls[2] = false;
+    //     cellB.walls[0] = false;
+    // }
+
+    // const WALLS = [
+    //     { a : 3, b : 1 },
+    //     { a : 0, b : 2 },
+    //     { a : -2, b : 0 },
+    //     { a : -1, b : -3 },
+    // ];
+
+    const OFFSETS = [
+        { x : 1, y : 0,  a : 3, b : 1 },
+        { x : - 1, y : 0, a : 0, b : 2 },
+        { x : 0, y : 1, a : -2, b : 0  },
+        { x : 0, y : - 1, a : -1, b : -3 }
+    ];
+
+    OFFSETS.forEach((dir, i ) => {
+        if (cellA.posX - cellB.posX === dir.x && cellA.posY - cellB.posY === dir.y) {
+            cellA.walls[i + dir.a] = false;
+            cellB.walls[i + dir.b] = false;
+        }
+    })
 }

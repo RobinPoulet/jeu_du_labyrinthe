@@ -21,20 +21,21 @@ class Maze {
     }
 
     get_neighbors(cell) {
+
+        const OFFSETS = [
+            cell.position - parseInt(mazeSize),
+            cell.position + 1,
+            cell.position + parseInt(mazeSize),
+            cell.position - 1
+        ];
         const neighbors = [];
 
-        if (!cell.walls[0]) {
-            neighbors.push(cell.position - parseInt(mazeSize));
-        }
-        if (!cell.walls[1]) {
-            neighbors.push(cell.position + 1);
-        }
-        if (!cell.walls[2]) {
-            neighbors.push(cell.position + parseInt(mazeSize));
-        }
-        if (!cell.walls[3]) {
-            neighbors.push(cell.position - 1);
-        }
+        OFFSETS.forEach((dir, index) => {
+            if (!cell.walls[index]) {
+                neighbors.push(dir);
+            }
+        })
+
         return neighbors;
     }
 
@@ -120,6 +121,11 @@ class Maze {
         this.queue.push(currentCell);
 
         while (this.queue.length > 0) {
+            // je trie mon tableau par odre de cout croissant avant de shift le premier élément
+            // de manière à avoir l'élément avec le cout le plus bas
+            this.queue.sort(function (a, b) {
+                return a.cost - b.cost;
+            })
 
             currentCell = this.queue.shift()
             this.path.push(currentCell.position);
@@ -139,9 +145,7 @@ class Maze {
                     this.mazeCells[voisin].cost = this.heuristicCost(this.mazeCells[voisin]);
                     this.mazeCells[voisin].parents = currentCell;
                     this.queue.push(this.mazeCells[voisin]);
-                    this.queue.sort(function (a, b) {
-                        return a.cost - b.cost;
-                    })
+
                 }
             }
 
