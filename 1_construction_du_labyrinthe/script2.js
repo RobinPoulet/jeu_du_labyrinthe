@@ -12,7 +12,7 @@ let mazeEx = document.getElementById("mazeExemple").value;
 
 // je crée une fonction qui détermine la taille de mes cases en fonctions de la taille du labyrinthe
 function configCellSize(mazeSize) {
-    return Math.floor(canvas.width / mazeSize);
+    return canvas.width / mazeSize;
 }
 
 // je crée un événement qui affiche un labyrinthe quand je clique sur le bouton "générer labyrinthe"
@@ -28,32 +28,78 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     maze = new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
    // j'affiche mon labyrinthe
     maze.display();
-
-    interval = setInterval(draw, 50);
-
+    drawStart();
+    drawExit();
 });
 
 // je crée un événement qui résoud et affiche le parcours avec l'algorithme DFS
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
+     maze = clearCanvas();
     maze.solveDFS(0);
     interval = setInterval(draw, 50);
+
+    createElementDisplayPathLenght(maze, 'DFS recursive');
 
 });
 
 // événement qui affiche la résolution du labyrinthe avec l'algorithme BFS
 document.querySelector('#resolutionBFS').addEventListener('click', function () {
-    // maze.solveBFS(0);
+    maze = clearCanvas();
+     maze.solveBFS(0);
+    interval = setInterval(draw, 50);
+
+    createElementDisplayPathLenght(maze, 'BFS');
+})
+
+// événement qui affiche la résolution du labyrinthe avec l'algorithme A*
+document.querySelector('#resolutionAStar').addEventListener('click', function () {
+    maze = clearCanvas();
     maze.solveAstar();
     interval = setInterval(draw, 50);
+
+    createElementDisplayPathLenght(maze, 'A*');
 })
 
 // événement qui reset le canvas
 document.querySelector('#buttonRAS').addEventListener('click', function () {
+    removeDisplayPathLenght();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    maze.path = [];
+    maze.shortPath = [];
+
 })
 
 
+// fonction qui crée un élément pour afficher la taille du chemin
+function createElementDisplayPathLenght(maze, algo) {
+    let tr = document.createElement('tr');
+    let tdAlgoName = document.createElement('td');
+    tdAlgoName.innerHTML = algo;
+    tr.appendChild(tdAlgoName);
+    let tdPath = document.createElement('td');
+    tdPath.innerHTML = ' ' + maze.path.length + ' cases';
+    tr.appendChild(tdPath);
+    let tdShortPath = document.createElement('td');
+    tdShortPath.innerHTML = ' ' + maze.shortPath.length + ' cases';
+    tr.appendChild(tdShortPath);
+    let tbody = document.getElementById('tableCompaAlgos')
+    tbody.appendChild(tr);
+}
 
+// fonction pour effacer l'élement créer au-dessus
+function removeDisplayPathLenght() {
+    let element = document.getElementById('tableCompaAlgos');
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+// fonction pour reset l'écran avant affichage
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    return  new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
+}
 
 // fonction pour afficher la solution
 function colorCell(cell, maze) {
@@ -67,7 +113,7 @@ function colorCell(cell, maze) {
     } else {
         ctx.fillStyle = '#2F4F4F';
     }
-   ctx.fillRect(x , y , caseSize , caseSize);
+   ctx.fillRect(x , y , caseSize + 1, caseSize + 1);
     drawStart();
     drawExit();
 }
