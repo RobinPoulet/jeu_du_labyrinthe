@@ -4,6 +4,7 @@ h1 {
     font-size: 50px;
     font-weight: bold;
     margin: 50px;
+    color:whitesmoke;
 }
 
 .container {
@@ -22,30 +23,46 @@ h1 {
 }
 
 #selectMazeEx {
-    width: 35%;
+    width: 20%;
+    height: 40%;
 }
 
 table {
     margin: 40px;
+    text-align: center;
 }
 
 h3 {
     margin-top: 40px;
     margin: 40px;
+    color:whitesmoke;
+    text-align: center;
 }
 
 #tableALgo {
     margin-top: 40px;
-    margin: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 body {
-    background-image: url("img/circles-dark.png");
+    background-image: url("img/—Pngtree—modern double color futuristic neon_1181573.jpg");
     background-repeat: repeat;
+    color:whitesmoke;
 }
 
 .p5Canvas {
     margin-left: 50px;
     margin-right: 50px;
+}
+
+label {
+    color:whitesmoke;
+}
+
+#mazeGen {
+    margin-left: auto;
+    margin-right: auto;
 }
 

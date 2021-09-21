@@ -7,7 +7,7 @@ class Maze {
         this.currentPos = 0;
         this.lastCell = mazeDescription.length - 1;
         this.cellSize = cellSize;
-        this.queue = [];
+
         mazeDescription.forEach((cellDescription, index) => {
             let c = new Cell(cellDescription, index, this.cellSize);
             this.mazeCells.push(c);
@@ -28,6 +28,7 @@ class Maze {
             cell.position + parseInt(mazeSize),
             cell.position - 1
         ];
+
         const neighbors = [];
 
         OFFSETS.forEach((dir, index) => {
@@ -44,6 +45,8 @@ class Maze {
 
         if (position === this.lastCell) {
             console.log("c'est gagné");
+            this.path.push(position);
+            this.solutionPathRecursive(position);
             return true;
         }
 
@@ -57,8 +60,8 @@ class Maze {
             if (!v.visited) {
                 v.parents = currentCell;
                 if (this.solveDFS(v.position)) {
-                    this.path.push(v.position);
-                    return this.solutionPathRecursive(v.position);
+                    // this.path.push(v.position);
+                    return true;
                 }
             }
         }
@@ -66,6 +69,7 @@ class Maze {
     }
 
     solutionPathRecursive(pos) {
+
         this.shortPath.push(pos);
         if (pos === 0) {
             return this.shortPath;
@@ -75,12 +79,12 @@ class Maze {
     }
 
     solveBFS(pos) {
+        let queue = [];
+        queue.push(pos);
 
-       this.queue.push(pos);
+       while (queue.length > 0) {
 
-       while (this.queue.length > 0) {
-
-           let curPos = this.queue.shift();
+           let curPos = queue.shift();
 
            this.path.push(curPos);
 
@@ -101,7 +105,7 @@ class Maze {
                if (!this.mazeCells[neighbors[i]].visited) {
 
                    this.mazeCells[neighbors[i]].parents = this.mazeCells[curPos];
-                   this.queue.push(neighbors[i]);
+                   queue.push(neighbors[i]);
                }
 
            }
@@ -115,19 +119,19 @@ class Maze {
     }
 
     solveAstar() {
-
+        let queue = [];
         let currentCell = this.mazeCells[0]
 
-        this.queue.push(currentCell);
+        queue.push(currentCell);
 
-        while (this.queue.length > 0) {
+        while (queue.length > 0) {
             // je trie mon tableau par odre de cout croissant avant de shift le premier élément
             // de manière à avoir l'élément avec le cout le plus bas
-            this.queue.sort(function (a, b) {
+            queue.sort(function (a, b) {
                 return a.cost - b.cost;
             })
 
-            currentCell = this.queue.shift()
+            currentCell = queue.shift()
             this.path.push(currentCell.position);
             currentCell.visited = true;
             console.log(currentCell.position);
@@ -144,7 +148,7 @@ class Maze {
                 if (!this.mazeCells[voisin].visited) {
                     this.mazeCells[voisin].cost = this.heuristicCost(this.mazeCells[voisin]);
                     this.mazeCells[voisin].parents = currentCell;
-                    this.queue.push(this.mazeCells[voisin]);
+                    queue.push(this.mazeCells[voisin]);
 
                 }
             }
