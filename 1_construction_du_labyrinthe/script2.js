@@ -26,6 +26,7 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     caseSize = configCellSize(mazeSize);
     // j'initialise mon canvas avant affichage du labyrinthe
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    resolveSecondMaze = false;
     // je crée un objet de type labyrinthe avec les infos récupérées
     maze = new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
     // j'affiche mon labyrinthe
