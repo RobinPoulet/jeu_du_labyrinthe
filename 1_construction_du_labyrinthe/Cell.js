@@ -13,10 +13,10 @@ class Cell {
         let y = this.posY * this.cellSize;
 
         const OFFSETS = [
-            {Sx : x, Sy : y, Ex : x + this.cellSize, Ey : y },
-            {Sx : x + this.cellSize, Sy : y, Ex : x + this.cellSize, Ey : y + this.cellSize},
-            {Sx : x + this.cellSize, Sy : y + this.cellSize, Ex : x, Ey : y + this.cellSize},
-            {Sx: x, Sy: y + this.cellSize, Ex: x, Ey : y}
+            {Sx : x                , Sy : y                , Ex : x + this.cellSize, Ey : y },
+            {Sx : x + this.cellSize, Sy : y                , Ex : x + this.cellSize, Ey : y + this.cellSize},
+            {Sx : x + this.cellSize, Sy : y + this.cellSize, Ex : x                , Ey : y + this.cellSize},
+            {Sx: x                 , Sy : y + this.cellSize, Ex : x                , Ey : y}
         ]
 
         ctx.beginPath();
