@@ -117,7 +117,7 @@ function Cell(i, j) {
 
         if (this.visited) {
             noStroke();
-            fill(22, 112, 155, 100);
+            fill(0, 255, 255, 100);
             rect(x, y, w, w);
         }
     }
@@ -132,29 +132,6 @@ function Cell(i, j) {
 
 function removeWalls(cellA, cellB) {
 
-    // let x = cellA.posX - cellB.posX;
-    // if (x === 1) {
-    //     cellA.walls[3] = false;
-    //     cellB.walls[1] = false;
-    // } else if (x === -1) {
-    //     cellA.walls[1] = false;
-    //     cellB.walls[3] = false;
-    // }
-    // let y = cellA.posY - cellB.posY;
-    // if (y === 1) {
-    //     cellA.walls[0] = false;
-    //     cellB.walls[2] = false;
-    // } else if (y === -1) {
-    //     cellA.walls[2] = false;
-    //     cellB.walls[0] = false;
-    // }
-
-    // const WALLS = [
-    //     { a : 3, b : 1 },
-    //     { a : 0, b : 2 },
-    //     { a : -2, b : 0 },
-    //     { a : -1, b : -3 },
-    // ];
 
     const OFFSETS = [
         { x : 1, y : 0,  a : 3, b : 1 },

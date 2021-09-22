@@ -26,19 +26,27 @@
 </div>
 
 <div class="container">
+    <p class="presentationpage">Bonjour cette page va vous présenter la résolution de labyrinthe, grâce à trois algorithmes différents : le DFS
+        (version récursive), le BFS et le A* </p>
+</div>
+
+<div class="container">
     <div class="row">
-        <div class="col-6">
-            <label for="mazeSize">Choisir la taille du labyrinthe</label>
+        <div class="col-4">
+            <h4>On commence par choisir la taille et l'exemple souhaité</h4>
+        </div>
+        <div class="col-4">
+            <label for="mazeSize">Taille (nombre de cases d'une ligne)</label>
             <input type="number" id="mazeSize" value="3" size="2" min="3" max="25">
         </div>
-        <div class="col-6" id="selectMazeEx">
-            <label for="mazeExemple">Choisir un exemple de labyrinthe</label>
+        <div class="col-4" id="selectMazeEx">
             <select
                     class="form-select h-100 w-100"
                     id="mazeExemple"
                     aria-label=""
 
             >
+                <option selected>Choisir un exemple</option>
                 <option value="ex-0">Exemple 0</option>
                 <option value="ex-1">Exemple 1</option>
                 <option value="ex-2">Exemple 2</option>
@@ -55,14 +63,14 @@
                 </button>
             </div>
             <div class="container">
-                <button id="buttonRAS" class="btn btn-info">Effacer le Canvas</button>
+                <button id="buttonRAS" class="btn btn-warning">Effacer le Canvas</button>
             </div>
             <div class="container" id="mazeGen">
                 <div class="card" style="width: 18rem;">
                     <h5 class="card-title">Le générateur de Labyrinthe</h5>
                     <p class="card-text">Je vous propose de voir la création d'un labyrinthe avec l'algorithme
                         Randomized depth-first search</p>
-                    <a href="mazeGenerator.html" class="btn btn-dark">Aller voir</a>
+                    <button href="mazeGenerator.html" class="btn btn-info">Aller voir</button>
                 </div>
             </div>
         </div>

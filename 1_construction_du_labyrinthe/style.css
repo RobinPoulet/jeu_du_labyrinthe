@@ -7,6 +7,15 @@ h1 {
     color:whitesmoke;
 }
 
+h4  {
+    text-align: center;
+    font-family: "Book Antiqua";
+    font-size: 50px;
+    font-weight: bold;
+    margin: 50px;
+    color:whitesmoke;
+}
+
 .container {
     margin: 10px;
 }
@@ -33,7 +42,7 @@ table {
 }
 
 h3 {
-    margin-top: 40px;
+    margin-top: 70px;
     margin: 40px;
     color:whitesmoke;
     text-align: center;
@@ -53,8 +62,8 @@ body {
 }
 
 .p5Canvas {
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 label {
@@ -66,3 +75,20 @@ label {
     margin-right: auto;
 }
 
+#buttonRetour {
+    margin: 30px 25%;
+    /*color:whitesmoke;*/
+}
+
+.card-text {
+    background-color: #11ffee00;
+}
+
+.presentationpage {
+    text-align: center;
+    font-family: "Book Antiqua";
+    color:whitesmoke;
+    margin: 20px;
+    /*font-size: 10px;*/
+    font-weight: bolder;
+}
