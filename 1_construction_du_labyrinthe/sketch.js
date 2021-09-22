@@ -1,5 +1,5 @@
 let cols, rows;
-let w = 20;
+let w = 80;
 let grid = [];
 let newmaze = [];
 let current;
