@@ -11,24 +11,22 @@ class Cell {
     drawCell() {
         let x = this.posX * this.cellSize;
         let y = this.posY * this.cellSize;
-        let top = this.walls[0];
-        let right = this.walls[1];
-        let bottom = this.walls[2];
-        let left = this.walls[3];
+
+        const OFFSETS = [
+            {Sx : x, Sy : y, Ex : x + this.cellSize, Ey : y },
+            {Sx : x + this.cellSize, Sy : y, Ex : x + this.cellSize, Ey : y + this.cellSize},
+            {Sx : x + this.cellSize, Sy : y + this.cellSize, Ex : x, Ey : y + this.cellSize},
+            {Sx: x, Sy: y + this.cellSize, Ex: x, Ey : y}
+        ]
 
         ctx.beginPath();
-        if (top) {
-            this.drawLine(x, y, x + this.cellSize, y);
-        }
-        if (right) {
-            this.drawLine(x + this.cellSize, y, x + this.cellSize, y + this.cellSize);
-        }
-        if (bottom) {
-            this.drawLine(x + this.cellSize, y + this.cellSize, x, y + this.cellSize);
-        }
-        if (left) {
-            this.drawLine(x, y + this.cellSize, x, y);
-        }
+
+        OFFSETS.forEach((dirLine, i) => {
+            if(this.walls[i]) {
+                this.drawLine(dirLine.Sx, dirLine.Sy, dirLine.Ex, dirLine.Ey)
+            }
+        })
+
         ctx.strokeStyle = "#F00020";
         ctx.stroke();
     }
