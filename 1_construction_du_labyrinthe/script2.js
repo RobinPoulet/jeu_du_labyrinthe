@@ -26,7 +26,7 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // je crée un objet de type labyrinthe avec les infos récupérées
     maze = new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
-   // j'affiche mon labyrinthe
+    // j'affiche mon labyrinthe
     maze.display();
     drawStart();
     drawExit();
@@ -34,7 +34,7 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
 
 // je crée un événement qui résoud et affiche le parcours avec l'algorithme DFS
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
-     maze = clearCanvas();
+    maze = clearCanvas();
     maze.solveDFS(0);
     interval = setInterval(draw, 50);
 
@@ -45,7 +45,7 @@ document.querySelector('#resolutionDFS').addEventListener('click', function () {
 // événement qui affiche la résolution du labyrinthe avec l'algorithme BFS
 document.querySelector('#resolutionBFS').addEventListener('click', function () {
     maze = clearCanvas();
-     maze.solveBFS(0);
+    maze.solveBFS(0);
     interval = setInterval(draw, 50);
 
     createElementDisplayPathLenght(maze, 'BFS');
@@ -63,9 +63,7 @@ document.querySelector('#resolutionAStar').addEventListener('click', function ()
 // événement qui reset le canvas
 document.querySelector('#buttonRAS').addEventListener('click', function () {
     removeDisplayPathLenght();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    maze.path = [];
-    maze.shortPath = [];
+    clearCanvas();
 
 })
 
@@ -97,8 +95,9 @@ function removeDisplayPathLenght() {
 // fonction pour reset l'écran avant affichage
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    return  new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
+    maze.path = [];
+    maze.shortPath = [];
+    return new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
 }
 
 // fonction pour afficher la solution
@@ -113,7 +112,7 @@ function colorCell(cell, maze) {
     } else {
         ctx.fillStyle = '#2F4F4F';
     }
-   ctx.fillRect(x , y , caseSize + 1, caseSize + 1);
+    ctx.fillRect(x, y, caseSize + 1, caseSize + 1);
     drawStart();
     drawExit();
 }
