@@ -58,7 +58,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-2">
+        <div class="col-3">
             <div class="container" id="buttonMazeGenerate">
                 <button type="submit" id="mazeGenerate" class="btn btn-danger">Générer le labyrinthe
                 </button>
@@ -75,11 +75,16 @@
                         <a href="mazeGenerator.html"> Aller voir </a></button>
                 </div>
             </div>
+            <div class="container">
+                <button id="solver2" class="btn btn-info">
+                    afficher le labyrinthe crée par le générateur sur la page précédente
+                </button>
+            </div>
         </div>
         <div class="col-8">
-            <canvas id="myCanvas" width="600" height="600"></canvas>
+            <canvas id="myCanvas" width="800" height="800"></canvas>
         </div>
-        <div class="col-2">
+        <div class="col-1">
             <div class="container">
                 <button id="resolutionDFS" class="btn btn-info">Résolution avec DFS récursif</button>
             </div>

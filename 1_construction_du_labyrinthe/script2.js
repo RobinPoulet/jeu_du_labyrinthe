@@ -5,6 +5,8 @@ let caseSize;
 let maze;
 let x = 0;
 let interval;
+let resolveSecondMaze = false;
+let newmaze = JSON.parse(sessionStorage.getItem("grId"));
 
 // je crée deux variables pour récupérer les inputs pour afficher un labyrinthe choisi
 let mazeSize = document.getElementById("mazeSize").value;
@@ -32,8 +34,23 @@ document.querySelector("#mazeGenerate").addEventListener('click', function () {
     drawExit();
 });
 
+// je crée un événement pour afficher le labyrinthe crée par le génrateur
+document.querySelector("#solver2").addEventListener('click', function() {
+
+    newmaze.forEach(cell => cell.visited = false);
+    mazeSize = 10;
+    caseSize = configCellSize(mazeSize);
+    resolveSecondMaze = true;
+    maze = new Maze(newmaze, caseSize);
+    maze.display();
+    drawStart();
+    drawExit();
+
+})
+
 // je crée un événement qui résoud et affiche le parcours avec l'algorithme DFS
 document.querySelector('#resolutionDFS').addEventListener('click', function () {
+
     maze = clearCanvas();
     maze.solveDFS(0);
     interval = setInterval(draw, 50);
@@ -97,8 +114,13 @@ function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     maze.path = [];
     maze.shortPath = [];
+    if (resolveSecondMaze) {
+        return new Maze(newmaze, caseSize);
+    } else {
     return new Maze(jsonDatasBis[mazeSize][mazeEx], caseSize);
+    }
 }
+
 
 // fonction pour afficher la solution
 function colorCell(cell, maze) {
@@ -144,3 +166,6 @@ function drawExit() {
         caseSize / 2,
         caseSize / 2);
 }
+
+
+

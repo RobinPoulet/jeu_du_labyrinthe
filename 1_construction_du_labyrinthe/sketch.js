@@ -1,7 +1,7 @@
 let cols, rows;
-let w = 40;
+let w =;
 let grid = [];
-
+let newmaze = [];
 let current;
 
 let stack = [];
@@ -49,11 +49,14 @@ function draw() {
 
 
     }
+
+    sessionStorage.setItem("grId", JSON.stringify(grid));
+
 }
 
 function index(i, j) {
     if (i < 0 || j < 0 || i > cols - 1 || j > rows - 1) {
-        return - 1;
+        return -1;
     }
 
     return i + j * rows;
@@ -67,10 +70,10 @@ function Cell(i, j) {
 
     this.checkNeighbors = function () {
         const OFFSETS = [
-            index(i, j -1),
-            index(i +1, j),
-            index(i, j +1),
-            index(i -1, j)
+            index(i, j - 1),
+            index(i + 1, j),
+            index(i, j + 1),
+            index(i - 1, j)
         ]
 
         const neighbors = [];
@@ -103,10 +106,10 @@ function Cell(i, j) {
         let x = this.posX * w;
         let y = this.posY * w;
         const OFFSETS = [
-            {x: x,y: y,wi: x + w,h: y},
+            {x: x, y: y, wi: x + w, h: y},
             {x: x + w, y: y, wi: x + w, h: y + w},
-            {x : x + w, y: y + w, wi: x, h: y + w},
-            {x : x, y : y + w, wi: x, h: y}
+            {x: x + w, y: y + w, wi: x, h: y + w},
+            {x: x, y: y + w, wi: x, h: y}
         ];
         stroke(255);
         OFFSETS.forEach((dir, index) => {
@@ -126,24 +129,21 @@ function Cell(i, j) {
 }
 
 
-
-
-
-
 function removeWalls(cellA, cellB) {
 
 
     const OFFSETS = [
-        { x : 1, y : 0,  a : 3, b : 1 },
-        { x : - 1, y : 0, a : 0, b : 2 },
-        { x : 0, y : 1, a : -2, b : 0  },
-        { x : 0, y : - 1, a : -1, b : -3 }
+        {x: 1, y: 0, a: 3, b: 1},
+        {x: -1, y: 0, a: 0, b: 2},
+        {x: 0, y: 1, a: -2, b: 0},
+        {x: 0, y: -1, a: -1, b: -3}
     ];
 
-    OFFSETS.forEach((dir, i ) => {
+    OFFSETS.forEach((dir, i) => {
         if (cellA.posX - cellB.posX === dir.x && cellA.posY - cellB.posY === dir.y) {
             cellA.walls[i + dir.a] = false;
             cellB.walls[i + dir.b] = false;
         }
     })
 }
+
