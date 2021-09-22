@@ -21,9 +21,9 @@ class Cell {
 
         ctx.beginPath();
 
-        OFFSETS.forEach((dirLine, i) => {
+        OFFSETS.forEach((wallCoord, i) => {
             if(this.walls[i]) {
-                this.drawLine(dirLine.Sx, dirLine.Sy, dirLine.Ex, dirLine.Ey)
+                this.drawLine(wallCoord.Sx, wallCoord.Sy, wallCoord.Ex, wallCoord.Ey)
             }
         })
 
