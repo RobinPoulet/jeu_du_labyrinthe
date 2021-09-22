@@ -1,7 +1,7 @@
 let cols, rows;
 let w = 80;
 let grid = [];
-let newmaze = [];
+
 let current;
 
 let stack = [];
