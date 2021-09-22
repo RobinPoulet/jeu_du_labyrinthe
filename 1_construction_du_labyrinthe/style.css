@@ -80,6 +80,10 @@ label {
     /*color:whitesmoke;*/
 }
 
+#transfertGrid {
+    margin: 30px 25%;
+}
+
 .card-text {
     background-color: #11ffee00;
 }
